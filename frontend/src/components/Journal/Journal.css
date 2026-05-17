@@ -1,0 +1,229 @@
+/* ════════════════════════════════════════════════
+   Journal Tab
+   ════════════════════════════════════════════════ */
+
+.journal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Search */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  padding: 0 16px;
+  max-width: 400px;
+}
+
+.search-icon {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  font-size: 11px;
+}
+
+/* Entries */
+.journal-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.journal-card {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.18s, transform 0.15s;
+  animation: fadeIn 0.2s ease both;
+}
+
+.journal-card:hover {
+  border-color: var(--border-mid);
+  transform: translateX(2px);
+}
+
+/* Left accent strip */
+.card-accent {
+  width: 3px;
+  flex-shrink: 0;
+}
+
+.card-accent.profit  { background: var(--profit); }
+.card-accent.loss    { background: var(--loss); }
+.card-accent.neutral { background: var(--gold-dim); }
+
+.card-body {
+  flex: 1;
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Top row */
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-script {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+}
+
+.card-sector {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--neutral-dim);
+  color: var(--neutral);
+  border: 1px solid rgba(107,138,176,0.2);
+  font-family: var(--font-mono);
+}
+
+.card-status {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.card-status.open {
+  background: var(--profit-dim);
+  color: var(--profit);
+  border: 1px solid rgba(34,211,160,0.2);
+}
+
+.card-status.closed {
+  background: var(--neutral-dim);
+  color: var(--neutral);
+  border: 1px solid rgba(107,138,176,0.2);
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-pnl-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.card-pnl {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-pct {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.card-unrealised {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--gold-mid);
+  font-family: var(--font-mono);
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-dim);
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+/* Metrics row */
+.card-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.metric-value {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.empty-icon {
+  font-size: 32px;
+  opacity: 0.3;
+}
+
+/* Reuse from Investment */
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; }
+.page-title  { font-family: var(--font-display); font-size: 22px; font-weight: 800; letter-spacing: 0.04em; color: var(--text-primary); line-height: 1; }
+.page-subtitle { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px; letter-spacing: 0.06em; }
+.add-btn     { display: flex; align-items: center; gap: 8px; background: var(--gold-dim); border: 1px solid var(--gold-mid); color: var(--gold-bright); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; transition: all 0.18s; }
+.add-btn:hover { background: var(--gold-mid); color: var(--bg-void); box-shadow: var(--shadow-gold); transform: translateY(-1px); }
+.add-btn-icon { font-size: 18px; line-height: 1; font-weight: 400; }
+.delete-btn  { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; font-size: 11px; padding: 4px 8px; border-radius: 4px; transition: all 0.15s; }
+.delete-btn:hover { border-color: var(--loss); color: var(--loss); }

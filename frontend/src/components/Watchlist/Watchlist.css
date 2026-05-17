@@ -1,0 +1,246 @@
+/* ════════════════════════════════════════════════
+   Watchlist Tab
+   ════════════════════════════════════════════════ */
+
+.watchlist {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Inline form */
+.inline-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-mid);
+  border-radius: 10px;
+  padding: 20px 24px;
+  animation: fadeIn 0.18s ease both;
+}
+
+.inline-form-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--gold-bright);
+  margin-bottom: 16px;
+}
+
+.inline-form-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
+  gap: 14px;
+  align-items: end;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field.wide {
+  /* takes up more space in grid */
+}
+
+.field-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.field-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.field-input:focus {
+  border-color: var(--gold-mid);
+  box-shadow: 0 0 0 2px var(--gold-glow);
+}
+
+.form-field.error .field-input {
+  border-color: var(--loss);
+}
+
+.field-error {
+  font-size: 10px;
+  color: var(--loss);
+  font-family: var(--font-mono);
+}
+
+.inline-form-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-submit {
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-mid);
+  color: var(--gold-bright);
+  padding: 9px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  transition: all 0.15s;
+}
+
+.btn-submit:hover {
+  background: var(--gold-mid);
+  color: var(--bg-void);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Grid */
+.watchlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+/* Watch card */
+.watch-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s, transform 0.15s;
+  animation: fadeIn 0.2s ease both;
+}
+
+.watch-card:hover {
+  border-color: var(--border-mid);
+  transform: translateY(-2px);
+}
+
+.watch-card.at-target {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+.watch-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.watch-script {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+}
+
+.watch-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.target-badge {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-bright);
+  font-family: var(--font-mono);
+  animation: pulse-gold 2s infinite;
+}
+
+.watch-prices {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.price-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.price-value {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Price bar */
+.price-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.price-bar-track {
+  height: 4px;
+  background: var(--border-dim);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.price-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.price-bar-fill.profit { background: var(--profit); }
+.price-bar-fill.over   { background: var(--loss); opacity: 0.7; }
+
+.price-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+
+.watch-note {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-style: italic;
+  border-left: 2px solid var(--border-dim);
+  padding-left: 10px;
+}
+
+/* Reused */
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; }
+.page-title  { font-family: var(--font-display); font-size: 22px; font-weight: 800; letter-spacing: 0.04em; color: var(--text-primary); line-height: 1; }
+.page-subtitle { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px; letter-spacing: 0.06em; }
+.add-btn     { display: flex; align-items: center; gap: 8px; background: var(--gold-dim); border: 1px solid var(--gold-mid); color: var(--gold-bright); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; transition: all 0.18s; }
+.add-btn:hover { background: var(--gold-mid); color: var(--bg-void); box-shadow: var(--shadow-gold); transform: translateY(-1px); }
+.add-btn-icon { font-size: 18px; line-height: 1; font-weight: 400; }
+.delete-btn  { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; font-size: 11px; padding: 4px 8px; border-radius: 4px; transition: all 0.15s; }
+.delete-btn:hover { border-color: var(--loss); color: var(--loss); }
+.empty-state { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 64px; color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; grid-column: 1 / -1; }
+.empty-icon  { font-size: 32px; opacity: 0.3; }
