@@ -1,10 +1,21 @@
 // src/services/meroshareClient.js
 const axios = require("axios");
-const { AUTH_URL, VIEW_URL, PURCHASE_URL, CREDENTIALS, DEFAULTS } = require("../config/meroshare");
+const {
+  AUTH_URL,
+  VIEW_URL,
+  PURCHASE_URL,
+  CREDENTIALS,
+  DEFAULTS,
+} = require("../config/meroshare");
 const logger = require("../utils/logger");
 
 class MeroShareClient {
-  constructor() {
+  constructor(credentials = {}) {
+    this.credentials = {
+      clientId: credentials.clientId || CREDENTIALS.clientId,
+      username: credentials.username || CREDENTIALS.username,
+      password: credentials.password || CREDENTIALS.password,
+    };
     this.token = null;
     this.boid = null;
     this.clientCode = null;
@@ -20,17 +31,17 @@ class MeroShareClient {
     };
   }
 
- _requireAuth() {
-  if (!this.token) {
-    throw new Error("Client is not authenticated. Call login() first.");
+  _requireAuth() {
+    if (!this.token) {
+      throw new Error("Client is not authenticated. Call login() first.");
+    }
   }
-}
 
-_requireBoid() {
-  if (!this.boid) {
-    throw new Error("BOID not set. Call getOwnDetails() first.");
+  _requireBoid() {
+    if (!this.boid) {
+      throw new Error("BOID not set. Call getOwnDetails() first.");
+    }
   }
-}
   // ── Auth ────────────────────────────────────────────────────────────
 
   async login() {
@@ -38,15 +49,16 @@ _requireBoid() {
     const res = await axios.post(
       `${AUTH_URL}/auth/`,
       {
-        clientId: CREDENTIALS.clientId,
-        username: CREDENTIALS.username,
-        password: CREDENTIALS.password,
+        clientId: this.credentials.clientId,
+        username: this.credentials.username,
+        password: this.credentials.password,
       },
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json" } },
     );
 
     const token = res.headers["authorization"];
-    if (!token) throw new Error("Login failed: no authorization token returned.");
+    if (!token)
+      throw new Error("Login failed: no authorization token returned.");
 
     this.token = token;
     logger.info("✅ MeroShare login successful.");
@@ -57,7 +69,9 @@ _requireBoid() {
 
   async getOwnDetails() {
     this._requireAuth();
-    const res = await axios.get(`${AUTH_URL}/ownDetail/`, { headers: this._headers() });
+    const res = await axios.get(`${AUTH_URL}/ownDetail/`, {
+      headers: this._headers(),
+    });
     const d = res.data;
 
     this.boid = d.demat;
@@ -81,13 +95,11 @@ _requireBoid() {
         size,
         sortAsc: true,
       },
-      { headers: this._headers() }
+      { headers: this._headers() },
     );
 
     const data = res.data;
-    const shares = Array.isArray(data)
-      ? data
-      : data?.meroShareDematShare || [];
+    const shares = Array.isArray(data) ? data : data?.meroShareDematShare || [];
 
     logger.debug(`Fetched ${shares.length} shares.`);
     return { shares, total: data?.totalItems ?? shares.length };
@@ -107,11 +119,12 @@ _requireBoid() {
         size,
         sortAsc: true,
       },
-      { headers: this._headers() }
+      { headers: this._headers() },
     );
 
     const data = res.data;
-    const items = data.meroShareMyPortfolio || data.myPortfolio || data.object || [];
+    const items =
+      data.meroShareMyPortfolio || data.myPortfolio || data.object || [];
 
     logger.debug(`Fetched portfolio with ${items.length} items.`);
     return {
@@ -136,18 +149,26 @@ _requireBoid() {
         ],
         filterFieldParams: [
           { key: "companyIssue.companyISIN.script", alias: "Scrip" },
-          { key: "companyIssue.companyISIN.company.name", alias: "Company Name" },
-          { key: "companyIssue.assignedToClient.name", value: "", alias: "Issue Manager" },
+          {
+            key: "companyIssue.companyISIN.company.name",
+            alias: "Company Name",
+          },
+          {
+            key: "companyIssue.assignedToClient.name",
+            value: "",
+            alias: "Issue Manager",
+          },
         ],
         page,
         size,
         searchRoleViewConstants: "VIEW_APPLICABLE_SHARE",
       },
-      { headers: this._headers() }
+      { headers: this._headers() },
     );
 
     const data = res.data;
-    const issues = data.object || data.applicableIssue || (Array.isArray(data) ? data : []);
+    const issues =
+      data.object || data.applicableIssue || (Array.isArray(data) ? data : []);
     const total = data.totalCount || data.totalItems || issues.length;
 
     logger.debug(`Fetched ${issues.length} applicable issues.`);
@@ -161,7 +182,7 @@ _requireBoid() {
     const res = await axios.post(
       `${PURCHASE_URL}/search/wacc/`,
       { demat: this.boid, scrip: script },
-      { headers: this._headers() }
+      { headers: this._headers() },
     );
 
     const records = res.data?.waccUpdateResponse || [];

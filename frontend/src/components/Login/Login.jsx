@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css'; // Optional: Add styles to match your cyber/terminal layout
 
 
-const URL = import.meta.env.BACKEND_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 export default function Login({ onLoginSuccess }) {
   const [clientId, setClientId] = useState('');
@@ -17,7 +17,7 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await fetch('URL/api/login', {
+      const response = await fetch(`${BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId, username, password }),

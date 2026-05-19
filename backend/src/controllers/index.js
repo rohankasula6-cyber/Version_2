@@ -130,11 +130,24 @@ exports.getSyncLogs = async (req, res) => {
 };
 
 // ── Manual Sync Trigger ───────────────────────────────────────────────
+// REPLACE the whole triggerSync export:
 exports.triggerSync = async (req, res) => {
   try {
     logger.info("Manual sync triggered via API.");
     res.json({ success: true, message: "Sync started. Check /api/sync/logs for status." });
-    await runFullSync();
+
+    // Load last user from DB for credentials
+    const User = require("../models/User");
+    const lastUser = await User.findOne().sort({ lastLoginAt: -1 }).lean();
+    if (lastUser) {
+      runFullSync({
+        clientId: lastUser.clientId,
+        username:  lastUser.username,
+        password:  process.env.MEROSHARE_PASSWORD,
+      });
+    } else {
+      logger.warn("Manual sync: no user found in DB.");
+    }
   } catch (e) {
     logger.error(e);
   }

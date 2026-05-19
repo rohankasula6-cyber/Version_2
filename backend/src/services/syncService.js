@@ -149,15 +149,31 @@ async function syncWacc(client, scripts = []) {
 
 // ── Main sync orchestrator ────────────────────────────────────────────
 
-async function runFullSync() {
+async function runFullSync(credentials = null) {
   const startedAt = new Date();
   const steps = [];
   logger.info("═══════════════════════════════════════════");
   logger.info("        Starting Full MeroShare Sync       ");
   logger.info("═══════════════════════════════════════════");
 
-  const client = new MeroShareClient();
+  // If no credentials passed (e.g. cron), load last logged-in user from DB
+  if (!credentials) {
+    const User = require("../models/User");
+    const lastUser = await User.findOne().sort({ lastLoginAt: -1 }).lean();
+    if (!lastUser) {
+      logger.error("No user in DB. Login via the app first to enable scheduled sync.");
+      return;
+    }
+    credentials = {
+      clientId: lastUser.clientId,
+      username:  lastUser.username,
+      password:  process.env.MEROSHARE_PASSWORD, // cron uses .env
+    };
+    logger.info(`Syncing for user: ${lastUser.username}`);
+  }
 
+  const client = new MeroShareClient(credentials);
+  
   const run = async (name, fn) => {
     try {
       const count = await fn();

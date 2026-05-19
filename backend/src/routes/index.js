@@ -1,11 +1,18 @@
 // src/routes/index.js
 const router = require("express").Router();
 const ctrl = require("../controllers/index");
+const authCtrl  = require("../controllers/authController");
+const protect   = require("../middleware/auth");
 
 // ── Health ─────────────────────────────────────────────────────────────
 router.get("/health", (req, res) =>
   res.json({ status: "ok", timestamp: new Date().toISOString() })
 );
+router.post("/auth/login",  authCtrl.login);
+
+router.use(protect);   // everything below requires Bearer token
+
+router.get("/auth/me",      authCtrl.getMe);
 
 // ── Profile ────────────────────────────────────────────────────────────
 router.get("/profile", ctrl.getProfile);
